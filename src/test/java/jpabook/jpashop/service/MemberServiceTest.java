@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 //@RunWith(SpringRunner.class)
 @SpringBootTest //스프링 부트를 띄운 상태에서 테스트 하기 위해 필요.
 @Transactional //트랜잭션을 걸고 테스트, 테스트 후 롤백.
-
 class MemberServiceTest {
 
     @Autowired MemberService memberService;

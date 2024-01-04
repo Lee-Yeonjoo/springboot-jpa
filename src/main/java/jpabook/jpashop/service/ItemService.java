@@ -16,8 +16,12 @@ public class ItemService { //거의 아이템 리포지토리에 일을 위임�
     private final ItemRepository itemRepository;
 
     @Transactional
-    public void saveItem(Item item) {
+    /*public void saveItem(Item item) {
         itemRepository.save(item);
+    }*/
+    public Long saveItem(Item item) {
+        itemRepository.save(item);
+        return item.getId();
     }
 
     public List<Item> findItems() {
