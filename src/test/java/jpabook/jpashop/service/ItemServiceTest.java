@@ -20,7 +20,7 @@ public class ItemServiceTest {
     @Test
     public void 상품등록() {
         //give
-        Item item = new Book();
+        Book item = new Book();
 
         //when
         Long itemId = itemService.saveItem(item);
@@ -32,8 +32,8 @@ public class ItemServiceTest {
     @Test
     public void 상품_단건조회() {
         //give
-        Item book = new Book();
-        book.setName("책1");
+        Book book = new Book();
+        book.setName("책");
         itemService.saveItem(book);
 
         //when

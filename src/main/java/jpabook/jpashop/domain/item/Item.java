@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) //상속 타입. 싱글 테이블은 테이블 한개에 상속되는 애들 다 한번에 넣는 것.
 @DiscriminatorColumn(name = "dtype")
-@Getter @Setter //Setter는 내가 테스트를 위해 추가한 것.
+@Getter @Setter
 public abstract class Item {
 
     @Id
