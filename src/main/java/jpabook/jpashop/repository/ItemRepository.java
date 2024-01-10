@@ -18,6 +18,7 @@ public class ItemRepository {
             em.persist(item);
         } else {
             em.merge(item); //이미 존재한다면 업데이트. db에 이미 등록된 걸 업데이트?
+            //실무에서는 merge를 잘 안쓴다.
         }
     }
 
