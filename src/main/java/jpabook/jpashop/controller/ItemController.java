@@ -64,7 +64,7 @@ public class ItemController {
     }
 
     @PostMapping("items/{itemId}/edit")
-    public String updateItem(@PathVariable Long itemId, @ModelAttribute("form") BookForm form) { //여기선 path variable 필요없음. @PathVariable쓰니까 오류남.. 왜지
+    public String updateItem(@PathVariable("itemId") Long itemId, @ModelAttribute("form") BookForm form) { //여기선 path variable 필요없음.
 
         /*Book book = new Book();   //준영속 엔티티는 jpa가 관리x -> setter로 값 변경해도 db에 반영x -> 변경 감지 기능이나 병합 사용.
         book.setId(form.getId()); //준영속 상태의 객체. jpa에 한번 들어갔다 나온 객체. 기존의 식별자를 저장한 엔티티를 말하는 건가..?
