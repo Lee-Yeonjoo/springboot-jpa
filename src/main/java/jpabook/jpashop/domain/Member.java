@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Member {
     @Embedded  //내장타입
     private Address address;
 
+    //@JsonIgnore 응답에서 무시됨. 권장x
     @OneToMany(mappedBy = "member")  //읽기 전용이 된다. 여기에 값을 변경해도 fk값이 변경되지x
     private List<Order> orders = new ArrayList<>(); //컬렉션은 생성자보단 필드에서 바로 초기화하는게 안전.
 }
