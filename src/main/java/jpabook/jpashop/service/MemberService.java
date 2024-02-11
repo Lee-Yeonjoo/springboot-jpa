@@ -47,4 +47,10 @@ public class MemberService {
     public Member findOne(Long memberId) { //단건 조회
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);  //영속 상태 -> 변경이 db에 잘 반영됨.
+        member.setName(name);
+    } //command와 query를 철저히 분리하자. update는 커맨드니까 반환하지 않아야함. -> 유지보수에 좋다.
 }
