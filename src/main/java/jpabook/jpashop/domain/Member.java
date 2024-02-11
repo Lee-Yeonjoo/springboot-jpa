@@ -1,6 +1,7 @@
 package jpabook.jpashop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,10 +12,11 @@ import java.util.List;
 @Getter @Setter
 public class Member {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id") //테이블에서 쉽게 구분하기 위해 따로 이름 설정해줘야 함.
     private Long id;
 
+    //@NotEmpty
     private String name;
 
     @Embedded  //내장타입
