@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
+    //@JsonIgnore //순환 참조로 인한 에러 해결을 위함. 순환 참조를 끊어준다. 한쪽에만 하면 된다.
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")  //fk 이름 설정
     private Member member; //연관관계의 주인
