@@ -85,4 +85,12 @@ public class OrderRepository {
 
         return query.getResultList();
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class //멤버와 딜리버리를 오더와 함께 가져온다. 진짜 객체를 가져옴. 프록시x
+        ).getResultList();
+    }
 }

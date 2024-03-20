@@ -51,6 +51,16 @@ public class OrderSimpleApiController {
         return result;
     }
 
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() { //성능 최적화를 위한 fetch join 사용
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();  //alt+enter하면 메서드 생성해줌
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(toList());
+
+        return result;
+    }
+
     @Data
     static class SimpleOrderDto {
         private Long orderId;
