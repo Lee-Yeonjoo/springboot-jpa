@@ -5,6 +5,8 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -22,6 +23,7 @@ import static java.util.stream.Collectors.*;
 public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() { //엔티티 그대로 반환하는 경우
@@ -59,6 +61,11 @@ public class OrderSimpleApiController {
                 .collect(toList());
 
         return result;
+    }
+
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderSimpleQueryRepository.findOrderDtos(); //리포지토리는 순수한 엔티티를 조회하는 용도이고, 화면에 종속되는 dto를 조회하는 경우는 패키지를 따로 파고, 리포지토리도 따로 만드는게 좋다.(QueryService, QueryRepository) -> 유지보수성이 좋아진다.
     }
 
     @Data

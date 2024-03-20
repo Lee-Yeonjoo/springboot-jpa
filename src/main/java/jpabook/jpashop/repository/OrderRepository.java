@@ -3,6 +3,7 @@ package jpabook.jpashop.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+//import jpabook.jpashop.api.OrderSimpleApiController; 리포지토리에 컨트롤러 의존관계가 생기면 안된다!
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
 import lombok.RequiredArgsConstructor;
@@ -93,4 +94,6 @@ public class OrderRepository {
                         " join fetch o.delivery d", Order.class //멤버와 딜리버리를 오더와 함께 가져온다. 진짜 객체를 가져옴. 프록시x
         ).getResultList();
     }
+
+
 }
