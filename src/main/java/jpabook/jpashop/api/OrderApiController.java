@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -51,10 +52,22 @@ public class OrderApiController {
     public List<OrderDto> ordersV3() {
         List<Order> orders = orderRepository.findAllWithItem();
 
-        for (Order order : orders) {
+        /*for (Order order : orders) {
             System.out.println("order ref= " + order + " id=" + order.getId()); //하이버네이트 6 이전에는 distinct이 자동 적용이 안되어서 order가 4개가나온다.
-        }
+        }*/
         
+        List<OrderDto> result =  orders.stream()
+                .map(OrderDto::new)
+                .collect(toList());
+
+        return result;
+    }
+
+    @GetMapping("/api/v3.1/orders")
+    public List<OrderDto> ordersV3_page(@RequestParam(value = "offset", defaultValue = "0") int offset,
+                                        @RequestParam(value = "limit", defaultValue = "100") int limit) {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit); //페이징 상관없는 toOne인 애들은 페치조인
+
         List<OrderDto> result =  orders.stream()
                 .map(OrderDto::new)
                 .collect(toList());

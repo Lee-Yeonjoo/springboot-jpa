@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Order {
     @JoinColumn(name = "member_id")  //fk 이름 설정
     private Member member; //연관관계의 주인
 
+    @BatchSize(size = 1000)  //글로벌세팅 외의 방법
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) //cascade는 Order를 persist할 때 같이 persist해줌.
     private List<OrderItem> orderItems = new ArrayList<>();
 

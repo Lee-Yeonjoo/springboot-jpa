@@ -5,10 +5,12 @@ import jpabook.jpashop.domain.Category;
 import jpabook.jpashop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//@BatchSize(size = 100) 아이템은 toOne이니까 여기에서 설정
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) //상속 타입. 싱글 테이블은 테이블 한개에 상속되는 애들 다 한번에 넣는 것.
 @DiscriminatorColumn(name = "dtype")

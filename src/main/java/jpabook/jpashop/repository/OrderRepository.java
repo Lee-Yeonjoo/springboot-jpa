@@ -104,8 +104,18 @@ public class OrderRepository {
                                 " join fetch o.delivery d" +
                                 " join fetch o.orderItems oi" +  //orderItem이 order당 2개씩이라서 order가 총 4개가 되어 데이터 뻥튀기가 된다.
                                 " join fetch oi.item i", Order.class)
-                .setFirstResult(1)
+                .setFirstResult(0)
                 .setMaxResults(100) //컬렉션 조회에서 페치조인을 쓰면 메모리에서 페이징 처리를 한다. 잘못하면 out of memory 에러 날 수도.
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).setFirstResult(offset)  //toOne관계는 페이징 가능하다
+                .setMaxResults(limit)
                 .getResultList();
     }
 }
