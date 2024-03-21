@@ -47,6 +47,22 @@ public class OrderApiController {
         return result;
     }
 
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithItem();
+
+        for (Order order : orders) {
+            System.out.println("order ref= " + order + " id=" + order.getId()); //하이버네이트 6 이전에는 distinct이 자동 적용이 안되어서 order가 4개가나온다.
+        }
+        
+        List<OrderDto> result =  orders.stream()
+                .map(OrderDto::new)
+                .collect(toList());
+
+        return result;
+    }
+
+
     @Getter //no properties 라는 에러 설명이면 보통 getter,setter가 없을 때임
     //@Data
     static class OrderDto {

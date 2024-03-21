@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 //import jpabook.jpashop.api.OrderSimpleApiController; 리포지토리에 컨트롤러 의존관계가 생기면 안된다!
+import jpabook.jpashop.api.OrderApiController;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
 import lombok.RequiredArgsConstructor;
@@ -96,4 +97,15 @@ public class OrderRepository {
     }
 
 
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                        "select distinct o from Order o" + //하이버네이트6부터는 distinct가 자동 적용.
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d" +
+                                " join fetch o.orderItems oi" +  //orderItem이 order당 2개씩이라서 order가 총 4개가 되어 데이터 뻥튀기가 된다.
+                                " join fetch oi.item i", Order.class)
+                .setFirstResult(1)
+                .setMaxResults(100) //컬렉션 조회에서 페치조인을 쓰면 메모리에서 페이징 처리를 한다. 잘못하면 out of memory 에러 날 수도.
+                .getResultList();
+    }
 }
