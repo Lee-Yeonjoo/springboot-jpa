@@ -83,6 +83,10 @@ public class OrderApiController {
         return orderQueryRepository.findOrderQueryDtos();
     }
 
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5() {
+        return orderQueryRepository.findAllByDto_optimization();
+    }
 
 
     @Getter //no properties 라는 에러 설명이면 보통 getter,setter가 없을 때임
