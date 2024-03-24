@@ -34,7 +34,7 @@ public class OrderApiController {
     public List<Order> ordersV1() {
         List<Order> all = orderRepository.findAllByString(new OrderSearch());
         for (Order order : all) { //iter+tab 단축키
-            order.getMember().getName();
+            order.getMember().getName();  //지연로딩 -> osiv를 끄면 지연로딩이 불가능해 프록시 초기화 에러 발생. 해결방법: 페치 조인 쓰거나 컨트롤러의 이 코드를 트랜잭션 안으로 옮기기
             order.getDelivery().getAddress();
             //추가된 것
             List<OrderItem> orderItems = order.getOrderItems();
