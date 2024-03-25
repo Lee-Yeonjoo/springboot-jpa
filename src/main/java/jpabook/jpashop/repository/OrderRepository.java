@@ -1,11 +1,13 @@
 package jpabook.jpashop.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 //import jpabook.jpashop.api.OrderSimpleApiController; 리포지토리에 컨트롤러 의존관계가 생기면 안된다!
 import jpabook.jpashop.api.OrderApiController;
-import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.*;
 import jpabook.jpashop.domain.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,7 +29,7 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAll(OrderSearch orderSearch) {
+    /*public List<Order> findAll(OrderSearch orderSearch) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Order> cq = cb.createQuery(Order.class);
         Root<Order> o = cq.from(Order.class);
@@ -49,7 +51,7 @@ public class OrderRepository {
         cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
         return query.getResultList();
-    }
+    }*/
 
     public List<Order> findAllByString(OrderSearch orderSearch) {
         String jpql = "select o From Order o join o.member m";
@@ -86,6 +88,35 @@ public class OrderRepository {
         }
 
         return query.getResultList();
+    }
+
+    public List<Order> findAll(OrderSearch orderSearch) {
+        //static import로 코드를 줄일 수 있다.
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+        //생성자에 써주면 코드 지울 수 있음.
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        return query.select(order) //이게 jpql로 바뀌어서 실행된다.
+                .from(order)
+                .join(order.member, member) //order의 member를 조인하고, alias로 member 설정
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName())) //주문 상태가 같으면
+                .limit(1000)
+                .fetch(); //컴파일 시점에 오타가 잡히는 장점이 있다.
+    }
+
+    private BooleanExpression nameLike(String memberName) {  //동적쿼리에 쓰이는 메소드
+        if (!StringUtils.hasText(memberName)) {
+            return null;
+        }
+        return QMember.member.name.like(memberName);
+    }
+
+    private BooleanExpression statusEq(OrderStatus statusCond) {
+        if (statusCond == null) {
+            return null;
+        }
+        return QOrder.order.status.eq(statusCond);
     }
 
     public List<Order> findAllWithMemberDelivery() {
