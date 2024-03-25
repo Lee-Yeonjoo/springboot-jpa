@@ -3,7 +3,6 @@ package jpabook.jpashop.service;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor //final인 필드만 생성자 주입으로 만들어줌
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository; //spring data jpa 인터페이스만 만들었는데 여기에 알아서 구현체가 주입된다.
 
     //생성자 주입 권장. 생성자가 하나면 @Autowired 안써도 됨
     /*public MemberService(MemberRepository memberRepository) {
@@ -33,7 +32,7 @@ public class MemberService {
 
     private void validateDuplicateMember(Member member) {
         //EXCEPTION
-        List<Member> findMembers = memberRepository.findByName(member.getName()); //동시에 접근할 수도 있어서 실무에서는 멤버의 이름에 유니크 제약조건을 거는게 안전
+        List<Member> findMembers = memberRepository.findByName(member.getName()); //findByName은 따로 만든다.
         if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
@@ -45,12 +44,12 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId) { //단건 조회
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     @Transactional
     public void update(Long id, String name) {
-        Member member = memberRepository.findOne(id);  //영속 상태 -> 변경이 db에 잘 반영됨.
+        Member member = memberRepository.findById(id).get();  //영속 상태 -> 변경이 db에 잘 반영됨.
         member.setName(name);
     } //command와 query를 철저히 분리하자. update는 커맨드니까 반환하지 않아야함. -> 유지보수에 좋다.
 }
